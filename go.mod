@@ -2,7 +2,10 @@ module github.com/balasl342/kafka-payment-processor
 
 go 1.22.1
 
-require github.com/IBM/sarama v1.43.3
+require (
+	github.com/IBM/sarama v1.43.3
+	github.com/joho/godotenv v1.5.1
+)
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
