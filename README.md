@@ -69,3 +69,93 @@ Create a `docker-compose.yml` file to configure **Kafka** and **Zookeeper**.
     ```
 
 ---
+
+### 2. Application Setup
+
+#### Directory Structure
+
+The structure of the Kafka Fraud Detection application might look like this:
+
+```bash
+kafka-fraud-detection/
+│
+├── cmd/
+│   ├── producer/
+│   ├   └── main.go
+│   └── consumer/
+│   ├   └── main.go
+├── internal/
+│   ├── config/
+│   ├   └── config.go
+│   ├── kafka/
+│   ├   └── consumer.go
+│   ├   └── producer.go
+│   └── fraud/
+│   ├   └── detection.go
+│   ├── payment/
+│   ├   └── event.go
+├── docker-compose.yml
+├── go.mod
+└── README.md
+```
+
+#### Producer Service
+
+The producer simulates transaction data and pushes it to the Kafka topic. The producer is placed under `cmd/producer`.
+
+#### Consumer Service
+
+The consumer reads transactions from the Kafka topic, processes them, and identifies potential fraud. The fraud detection logic is handled in `pkg/fraud` and consumed in `cmd/consumer`.
+
+---
+
+### 3. Running the Producer and Consumer
+
+#### Env config
+Create a .env and set the below
+
+```
+KAFKA_BROKER=localhost:9092
+KAFKA_TOPIC=payments-topic
+```
+
+
+#### Producer
+
+To start the producer, which sends transactions to Kafka:
+
+```bash
+go run cmd/producer/main.go
+```
+
+#### Consumer
+
+To start the consumer, which listens for transactions and detects fraud:
+
+```bash
+go run cmd/consumer/main.go
+```
+
+---
+
+### 4. Stopping the Services
+
+To stop Kafka and Zookeeper, run:
+
+```bash
+docker-compose down
+```
+
+---
+
+### Example Usage
+
+- **Producer**: Sends simulated transactions to the `payments-topic` configured in the .env
+- **Consumer**: Consumes these transactions and checks for fraud by comparing each transaction against predefined rules.
+
+### Notes
+
+- The consumer service can be extended to include fraud detection logic like IP analysis, geolocation mismatches, or unusual spending patterns.
+- Both the producer and consumer leverage **Kafka** for real-time processing of transactions, making this architecture suitable for large-scale financial services.
+
+---
